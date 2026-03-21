@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd backend && npm install",
+  "startCommand": "cd backend && npm start",
+  "rootDirectory": "/",
+  "envVariables": {
+    "NODE_ENV": "production"
+  }
+}

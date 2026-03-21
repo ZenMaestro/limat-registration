@@ -1,0 +1,14 @@
+{
+  "name": "limat-registration",
+  "version": "1.0.0",
+  "description": "LIMAT Semester Registration System",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "install-backend": "cd backend && npm install"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
