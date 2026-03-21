@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="none" stroke="#f0f0f0" stroke-width="2"/>
+  
+  <!-- Flame 1 (Bottom) - Orange -->
+  <path d="M 100 80 C 85 65 75 45 75 30 C 75 15 85 5 100 5 C 115 5 125 15 125 30 C 125 50 115 70 100 80" fill="#FF6B35" opacity="0.9"/>
+  
+  <!-- Flame 2 (Middle) - Orange-Yellow -->
+  <path d="M 115 70 C 130 50 140 25 140 10 C 140 -5 130 -15 115 -15 C 100 -15 90 -5 90 10 C 90 35 100 60 115 70" fill="#FFB84D" opacity="0.85"/>
+  
+  <!-- Flame 3 (Top) - Yellow -->
+  <path d="M 85 60 C 70 40 60 15 60 0 C 60 -15 70 -25 85 -25 C 100 -25 110 -15 110 0 C 110 25 100 50 85 60" fill="#FFA630" opacity="0.95"/>
+  
+  <!-- Base swirl (Dark gray) -->
+  <path d="M 85 100 Q 95 110 100 115 Q 95 115 85 110 Q 80 105 85 100" fill="#666" opacity="0.6"/>
+  <path d="M 115 100 Q 105 110 100 115 Q 105 115 115 110 Q 120 105 115 100" fill="#333" opacity="0.7"/>
+</svg>

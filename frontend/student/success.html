@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Complete - LIMAT</title>
+  <link rel="icon" type="image/png" href="../assets/img/lingaya-logo.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <h1>
+        <img src="../assets/img/lingaya-logo.png" alt="Lingaya's Group" class="logo-img" width="50" height="50">
+        <span>LIMAT Registration Confirmed</span>
+      </h1>
+      <div class="nav-right">
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top: 3rem; padding-bottom: 3rem;"></div>
+
+  <div class="form-container" style="max-width: 500px; text-align: center;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+    <h2>Registration Completed!</h2>
+
+    <div class="alert alert-success" style="margin: 1.5rem 0;">
+      Your registration has been submitted and is now locked. You can no longer make any changes.
+    </div>
+
+    <div class="card" style="margin: 1.5rem 0; text-align: left;">
+      <div class="card-header">
+        <h3>Your Registration Summary</h3>
+      </div>
+      <div id="summaryContent" class="loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width: 100%;" onclick="logout()">Back to Login</button>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    // Load registered courses
+    async function loadSummary() {
+      try {
+        const response = await apiRequest('/student/registered-courses');
+        const summaryContent = document.getElementById('summaryContent');
+        summaryContent.innerHTML = '';
+
+        if (response.length === 0) {
+          summaryContent.innerHTML = '<p class="text-muted">No registrations found</p>';
+          return;
+        }
+
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Lecturer</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${response.map(reg => `
+              <tr>
+                <td>
+                  <strong>${reg.course_code}</strong>
+                  <div style="font-size: 0.875rem; color: #6b7280;">${reg.course_name}</div>
+                </td>
+                <td>${reg.lecturer_name}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+
+        summaryContent.appendChild(table);
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    loadSummary();
+  </script>
+
+  <!-- Footer -->
+  <footer style="margin-top: 4rem;">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Registration Complete</h4>
+        <p>Your course registration has been successfully submitted and confirmed.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Next Steps</h4>
+        <ul>
+          <li>📧 Check your email for confirmation</li>
+          <li>📚 Prepare for your courses</li>
+          <li>📅 Refer to academic calendar</li>
+          <li>💬 Contact your leaders if needed</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact Information</h4>
+        <p><strong>Academic Office:</strong> <a href="mailto:info@lingayas.com" style="color: #D1D5DB;">info@lingayas.com</a></p>
+        <p><strong>Phone:</strong> <a href="tel:+919642608883" style="color: #D1D5DB;">+91 9642 608883</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Lingaya's Group - LIMAT Registration System. All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LIMAT - Smart Semester Registration System</title>
+  <link rel="icon" type="image/png" href="assets/img/lingaya-logo.png">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <h1>
+        <img src="assets/img/lingaya-logo.png" alt="Lingaya's Group" class="logo-img" width="50" height="50">
+        <span>LIMAT Registration</span>
+      </h1>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Streamlined Course Registration</h1>
+      <p class="hero-subtitle">Manage your semester courses efficiently with our intelligent registration system. Select courses, choose lecturers, and confirm your enrollment in minutes.</p>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="container">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h3>Easy Registration</h3>
+        <p>Simple and intuitive interface to select your courses and lecturers for the semester.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👨‍🏫</div>
+        <h3>Choose Lecturers</h3>
+        <p>Select your preferred lecturer from available faculty members with real-time slot availability.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <h3>Instant Confirmation</h3>
+        <p>Get immediate confirmation of your course registration with detailed submission receipts.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Login Form Section -->
+  <section class="container">
+    <div class="form-container">
+      <div class="logo-section">
+        <img src="assets/img/lingaya-logo.png" alt="Lingaya's Group" class="logo-img" width="70" height="70">
+      </div>
+      <h2>Portal Access</h2>
+      <p style="text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.95rem;">Select your role to continue</p>
+
+      <div class="form-group">
+        <label>
+          <input type="radio" name="role" value="student" checked> Student Login
+        </label>
+        <label>
+          <input type="radio" name="role" value="admin"> Admin Portal
+        </label>
+      </div>
+
+      <!-- Student Login Form -->
+      <form id="studentLoginForm">
+        <div class="form-group">
+          <label for="collegeId">College ID</label>
+          <input type="text" id="collegeId" placeholder="e.g., 2024001" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </form>
+
+      <!-- Admin Login Form (hidden by default) -->
+      <form id="adminLoginForm" class="hidden">
+        <div class="form-group">
+          <label for="adminEmail">Email Address</label>
+          <input type="email" id="adminEmail" placeholder="Enter email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Admin Access</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About LIMAT</h4>
+        <p>Lingaya's Institute of Management & Technology - Excellence in education, Empowerment through technology.</p>
+        <div class="accreditation-badges">
+          <span>🏆 NAAC Accredited</span>
+          <span>📜 AICTE Approved</span>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="https://lingayas.edu.in/" target="_blank">Official Website</a></li>
+          <li><a href="#" onclick="return false;">Student Support</a></li>
+          <li><a href="#" onclick="return false;">Academic Calendar</a></li>
+          <li><a href="#" onclick="return false;">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact Information</h4>
+        <p><strong>Phone:</strong> <a href="tel:+919642608883" style="color: #D1D5DB;">+91 9642 608883</a></p>
+        <p><strong>Email:</strong> <a href="mailto:info@lingayas.com" style="color: #D1D5DB;">info@lingayas.com</a></p>
+        <p><strong>Address:</strong> Madalavarigudem, Via Nunna, Nuzvid Road, Vijayawada Rural-521212</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Lingaya's Group - LIMAT Registration System. All Rights Reserved.</p>
+      <p>Crafted with care for academic excellence | Secure & Reliable Platform</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/auth.js"></script>
+  <script>
+    const studentForm = document.getElementById('studentLoginForm');
+    const adminForm = document.getElementById('adminLoginForm');
+    const roleRadios = document.querySelectorAll('input[name="role"]');
+
+    // Toggle forms based on role selection
+    roleRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if (e.target.value === 'student') {
+          studentForm.classList.remove('hidden');
+          adminForm.classList.add('hidden');
+        } else {
+          studentForm.classList.add('hidden');
+          adminForm.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Student login
+    studentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      try {
+        const collegeId = document.getElementById('collegeId').value;
+        const password = document.getElementById('password').value;
+
+        const response = await apiRequest('/auth/student-login', 'POST', {
+          college_id: collegeId,
+          password
+        });
+
+        setToken(response.token);
+        setUser(response.student);
+
+        // Check if already submitted
+        if (response.student.is_submitted) {
+          window.location.href = 'student/success.html';
+        } else {
+          window.location.href = 'student/dashboard.html';
+        }
+      } catch (error) {
+        showError(error.message);
+      }
+    });
+
+    // Admin login
+    adminForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      try {
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
+
+        const response = await apiRequest('/auth/admin-login', 'POST', {
+          email,
+          password
+        });
+
+        setToken(response.token);
+        localStorage.setItem('admin', JSON.stringify(response.admin));
+
+        window.location.href = 'admin/dashboard.html';
+      } catch (error) {
+        showError(error.message);
+      }
+    });
+  </script>
+</body>
+</html>

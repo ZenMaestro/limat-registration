@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - LIMAT Registration</title>
+  <link rel="icon" type="image/png" href="../assets/img/lingaya-logo.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <h1>
+        <img src="../assets/img/lingaya-logo.png" alt="Lingaya's Group" class="logo-img" width="50" height="50">
+        <span>LIMAT Student Portal</span>
+      </h1>
+      <div class="nav-right">
+        <span id="studentName" style="color: white; margin-right: 1rem; font-weight: 600;"></span>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+    <!-- Student Details Card -->
+    <div id="studentDetailsCard" style="
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    ">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+        <div>
+          <div style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 0.5rem;">Student Information</div>
+          <div id="studentFullName" style="font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;"></div>
+          <div style="display: grid; gap: 0.8rem;">
+            <div>
+              <span style="opacity: 0.8; font-size: 0.875rem; text-transform: uppercase;">College ID</span>
+              <div id="studentCollegeId" style="font-size: 1.1rem; font-weight: 500;"></div>
+            </div>
+            <div>
+              <span style="opacity: 0.8; font-size: 0.875rem; text-transform: uppercase;">Email</span>
+              <div id="studentEmail" style="font-size: 1rem;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="display: grid; gap: 1rem;">
+          <div style="background: rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 8px;">
+            <div style="opacity: 0.9; font-size: 0.875rem; text-transform: uppercase; margin-bottom: 0.5rem;">Status</div>
+            <div id="studentStatus" style="font-size: 1.2rem; font-weight: 600;"></div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 8px;">
+            <div style="opacity: 0.9; font-size: 0.875rem; text-transform: uppercase; margin-bottom: 0.5rem;">Member Since</div>
+            <div id="studentMemberSince" style="font-size: 1.1rem;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-header">
+      <h2>📚 My Course Registration</h2>
+      <p class="text-muted">Select your preferred lecturer for each course and submit</p>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="progress-text">Progress: <span id="progressText">0/5</span> courses completed</div>
+      <div class="progress">
+        <div class="progress-bar-main" id="progressBar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Courses List -->
+    <div class="course-list" id="coursesList">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading courses...</p>
+      </div>
+    </div>
+
+    <!-- Submit Button (Fixed at bottom) -->
+    <div style="position: sticky; bottom: 0; background: white; padding: 1rem 0; border-top: 1px solid var(--border); margin-top: 2rem;">
+      <button id="submitBtn" class="btn btn-success" style="width: 100%; padding: 1rem; font-size: 1.1rem;" disabled>
+        ✓ Submit Registration
+      </button>
+      <p class="text-muted text-center mt-2" style="font-size: 0.875rem;">
+        Once submitted, you cannot make any changes
+      </p>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal" id="confirmModal">
+    <div class="modal-content">
+      <div class="modal-header">⚠️ Confirm Submission</div>
+      <div class="modal-body">
+        <p>You are about to submit your registration. <strong>You cannot change your selections after this.</strong></p>
+        <p class="mt-2">Are you sure you want to proceed?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="closeConfirmModal()">Cancel</button>
+        <button class="btn btn-success" onclick="confirmSubmit()">Yes, Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    let registeredCourses = {};
+    let totalCourses = 0;
+
+    // Check authentication
+    if (!isLoggedIn()) {
+      window.location.href = '../index.html';
+    }
+
+    const user = getUser();
+    document.getElementById('studentName').textContent = `Welcome, ${user.first_name || user.college_id}`;
+
+    // Load student details
+    async function loadStudentDetails() {
+      try {
+        const response = await apiRequest('/student/details');
+        
+        const fullName = `${response.first_name || ''} ${response.last_name || ''}`.trim();
+        const createdDate = new Date(response.created_at).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
+        const statusText = response.is_submitted 
+          ? '✓ Submitted' 
+          : (response.is_allowed ? '⏳ Active' : '✗ Not Allowed');
+        const statusColor = response.is_submitted 
+          ? '#4CAF50' 
+          : (response.is_allowed ? '#FFC107' : '#F44336');
+        
+        document.getElementById('studentFullName').textContent = fullName || user.college_id;
+        document.getElementById('studentCollegeId').textContent = response.college_id;
+        document.getElementById('studentEmail').textContent = response.email || 'Not provided';
+        document.getElementById('studentStatus').innerHTML = `<span style="color: ${statusColor}; font-weight: 700;">${statusText}</span>`;
+        document.getElementById('studentMemberSince').textContent = createdDate;
+      } catch (error) {
+        console.error('Error loading student details:', error);
+        showError('Failed to load student details');
+      }
+    }
+
+    // Load courses
+    async function loadCourses() {
+      try {
+        const response = await apiRequest('/course/all');
+        totalCourses = response.length;
+
+        // Get registered courses
+        const regResponse = await apiRequest('/student/registered-courses');
+        regResponse.forEach(reg => {
+          registeredCourses[reg.id] = reg.lecturer_id;
+        });
+
+        // Render courses
+        const coursesList = document.getElementById('coursesList');
+        coursesList.innerHTML = '';
+
+        for (const course of response) {
+          const isSelected = !!registeredCourses[course.id];
+          const courseCard = document.createElement('div');
+          courseCard.className = `course-card ${isSelected ? 'selected' : ''}`;
+          courseCard.innerHTML = `
+            <div class="course-code">${course.course_code}</div>
+            <div class="course-name">${course.course_name}</div>
+            <div class="course-status">
+              <span>Select lecturer</span>
+              <span class="status-badge ${isSelected ? 'status-selected' : 'status-pending'}">
+                ${isSelected ? '✓ Selected' : '⏳ Pending'}
+              </span>
+            </div>
+          `;
+          courseCard.onclick = () => openLecturerSelection(course);
+          coursesList.appendChild(courseCard);
+        }
+
+        updateProgress();
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    // Open lecturer selection
+    async function openLecturerSelection(course) {
+      try {
+        const response = await apiRequest(`/course/${course.id}`);
+        const lecturers = response.lecturers;
+
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+          <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">${course.course_code}: ${course.course_name}</div>
+            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+              <div id="lecturersList"></div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-danger" onclick="this.closest('.modal').remove()">Close</button>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        const lecturersList = modal.querySelector('#lecturersList');
+        lecturers.forEach(lecturer => {
+          const percentage = (lecturer.enrolled_students / lecturer.max_slots) * 100;
+          const isSelected = registeredCourses[course.id] === lecturer.id;
+
+          const lecturerCard = document.createElement('div');
+          lecturerCard.className = `lecturer-card ${isSelected ? 'selected' : ''} ${lecturer.is_full ? 'full' : ''}`;
+          lecturerCard.innerHTML = `
+            <div class="lecturer-info">
+              <div class="lecturer-name">${lecturer.lecturer_name}</div>
+              ${lecturer.is_full ? '<span class="badge badge-danger">FULL</span>' : ''}
+            </div>
+            <div class="slots-info">
+              <div class="slots-bar">
+                <div class="progress-bar">
+                  <div class="progress-fill ${lecturer.is_full ? 'full' : ''}" style="width: ${percentage}%"></div>
+                </div>
+              </div>
+              <div class="slot-count">${lecturer.enrolled_students}/${lecturer.max_slots}</div>
+            </div>
+            <button class="btn btn-sm ${isSelected ? 'btn-danger' : 'btn-primary'}" style="width: 100%; margin-top: 1rem;">
+              ${isSelected ? '✓ Selected' : 'Select'}
+            </button>
+          `;
+
+          if (!lecturer.is_full) {
+            lecturerCard.querySelector('button').onclick = async () => {
+              try {
+                await apiRequest('/student/register-course', 'POST', {
+                  course_id: course.id,
+                  lecturer_id: lecturer.id
+                });
+
+                registeredCourses[course.id] = lecturer.id;
+                modal.remove();
+                loadCourses();
+                showSuccess('Registration successful!');
+              } catch (error) {
+                showError(error.message);
+              }
+            };
+          }
+
+          lecturersList.appendChild(lecturerCard);
+        });
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    // Update progress
+    function updateProgress() {
+      const completed = Object.keys(registeredCourses).length;
+      const percentage = (completed / totalCourses) * 100;
+
+      document.getElementById('progressText').textContent = `${completed}/${totalCourses}`;
+      document.getElementById('progressBar').style.width = `${percentage}%`;
+
+      // Enable submit button if all courses are selected
+      const submitBtn = document.getElementById('submitBtn');
+      if (completed === totalCourses) {
+        submitBtn.disabled = false;
+      } else {
+        submitBtn.disabled = true;
+      }
+    }
+
+    // Submit registration
+    document.getElementById('submitBtn').addEventListener('click', () => {
+      document.getElementById('confirmModal').classList.add('active');
+    });
+
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.remove('active');
+    }
+
+    async function confirmSubmit() {
+      try {
+        await apiRequest('/student/submit-registration', 'POST');
+        showSuccess('Registration submitted successfully!');
+        setTimeout(() => {
+          window.location.href = 'success.html';
+        }, 2000);
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    // Load courses on page load
+    (async () => {
+      await loadStudentDetails();
+      loadCourses();
+    })();
+  </script>
+
+  <!-- Footer -->
+  <footer style="margin-top: 4rem;">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Student Registration</h4>
+        <p>Complete your course registration for the upcoming semester.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Important Dates</h4>
+        <ul>
+          <li><strong>Registration Deadline:</strong> Check your academic calendar</li>
+          <li><strong>Course Selection:</strong> Limited slots available</li>
+          <li><strong>Contact Support:</strong> For any issues</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Help & Support</h4>
+        <p><strong>Need Help?</strong> Contact your academic advisor or <a href="mailto:info@lingayas.com" style="color: #D1D5DB;">admin@lingayas.com</a></p>
+        <p><strong>Phone:</strong> <a href="tel:+919642608883" style="color: #D1D5DB;">+91 9642 608883</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Lingaya's Group - LIMAT Registration System. All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

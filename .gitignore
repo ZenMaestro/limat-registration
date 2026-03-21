@@ -1,0 +1,65 @@
+# Environment variables (NEVER COMMIT REAL SECRETS)
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# Logs & Temp
+logs/
+*.log
+tmp/
+temp/
+.cache/
+
+# Build & Dist
+dist/
+build/
+coverage/
+.nyc_output/
+
+# Testing
+test-results/
+junit.xml
+
+# OS
+*.pem
+*.key
+.AppleDouble
+.LSOverride
+._*
+
+# Docker
+docker-compose.override.yml
+
+# Database
+*.sqlite
+*.db
+*.mysql
+
+# Security
+*.backup
+*.bak
+
+# Generated files
+config.local.js
+database-dump.sql
