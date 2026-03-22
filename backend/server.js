@@ -72,6 +72,36 @@ app.post('/api/test-login', async (req, res) => {
   }
 });
 
+// Debug endpoint to check admin password hash in database
+app.get('/api/debug/admin-hash', async (req, res) => {
+  try {
+    const connection = await db.getConnection();
+    const results = await connection.query('SELECT email, password FROM admins WHERE email = ?', ['admin@limat.edu']);
+    connection.release();
+    
+    if (results.length === 0) {
+      return res.json({ message: 'No admin found', email: 'admin@limat.edu' });
+    }
+    
+    const admin = results[0];
+    const passwordLength = admin.password ? admin.password.length : 0;
+    const startsWithDollar = admin.password ? admin.password.startsWith('$') : false;
+    const startsWithHash = admin.password ? admin.password.startsWith('$2a$10$') : false;
+    
+    res.json({
+      email: admin.email,
+      password_hash: admin.password,
+      password_length: passwordLength,
+      starts_with_dollar: startsWithDollar,
+      starts_with_correct_bcrypt_prefix: startsWithHash,
+      is_corrupted: !startsWithHash && passwordLength > 0
+    });
+  } catch (error) {
+    console.error('Debug endpoint error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Serve index.html for all non-API routes (SPA fallback)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
