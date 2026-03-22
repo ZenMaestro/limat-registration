@@ -88,52 +88,70 @@ function logout() {
   window.location.href = '/index.html';
 }
 
-// Student Login Form Handler
-if (document.getElementById('studentLoginForm')) {
-  document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-      const college_id = document.getElementById('collegeId').value;
-      const password = document.getElementById('password').value;
+// Initialize form handlers when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, attaching form handlers');
 
-      const data = await apiRequest('/auth/student-login', 'POST', {
-        college_id,
-        password
-      });
+  // Student Login Form Handler
+  const studentForm = document.getElementById('studentLoginForm');
+  if (studentForm) {
+    console.log('Student form found, attaching handler');
+    studentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('Student form submitted');
+      try {
+        const college_id = document.getElementById('collegeId').value;
+        const password = document.getElementById('password').value;
 
-      setToken(data.token);
-      setUser(data.student);
-      showSuccess('Login successful! Redirecting...');
-      setTimeout(() => {
-        window.location.href = '/student/dashboard.html';
-      }, 1500);
-    } catch (error) {
-      showError(error.message);
-    }
-  });
-}
+        const data = await apiRequest('/auth/student-login', 'POST', {
+          college_id,
+          password
+        });
 
-// Admin Login Form Handler
-if (document.getElementById('adminLoginForm')) {
-  document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-      const email = document.getElementById('adminEmail').value;
-      const password = document.getElementById('adminPassword').value;
+        setToken(data.token);
+        setUser(data.student);
+        showSuccess('Login successful! Redirecting...');
+        setTimeout(() => {
+          window.location.href = '/student/dashboard.html';
+        }, 1500);
+      } catch (error) {
+        showError(error.message);
+      }
+    });
+  } else {
+    console.log('Student form NOT found');
+  }
 
-      const data = await apiRequest('/auth/admin-login', 'POST', {
-        email,
-        password
-      });
+  // Admin Login Form Handler
+  const adminForm = document.getElementById('adminLoginForm');
+  if (adminForm) {
+    console.log('Admin form found, attaching handler');
+    adminForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('Admin form submitted');
+      try {
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
 
-      setToken(data.token);
-      setUser(data.admin);
-      showSuccess('Admin login successful! Redirecting...');
-      setTimeout(() => {
-        window.location.href = '/admin/dashboard.html';
-      }, 1500);
-    } catch (error) {
-      showError(error.message);
-    }
-  });
-}
+        console.log('Attempting login with:', { email });
+
+        const data = await apiRequest('/auth/admin-login', 'POST', {
+          email,
+          password
+        });
+
+        setToken(data.token);
+        setUser(data.admin);
+        showSuccess('Admin login successful! Redirecting...');
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard.html';
+        }, 1500);
+      } catch (error) {
+        console.error('Login error:', error);
+        showError(error.message);
+      }
+    });
+  } else {
+    console.log('Admin form NOT found');
+  }
+});
