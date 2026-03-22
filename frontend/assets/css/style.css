@@ -25,8 +25,11 @@
 
 body {
   font-family: 'Segoe UI', 'Inter', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/img/clg.png') no-repeat center/cover;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/clg.png');
+  background-repeat: no-repeat;
   background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
   color: var(--dark);
   line-height: 1.6;
   min-height: 100vh;
@@ -102,7 +105,8 @@ nav button:hover {
 
 /* Forms */
 .form-container {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   padding: 3rem 2.5rem;
   border-radius: 12px;
   box-shadow: var(--shadow-md);
