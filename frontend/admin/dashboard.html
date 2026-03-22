@@ -99,6 +99,17 @@
       <div class="modal-header">Add New Student</div>
       <form id="addStudentForm" style="padding: 1rem;">
         <div class="form-group">
+          <label for="department">Department</label>
+          <select id="department" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px;">
+            <option value="" disabled selected>Select Department</option>
+            <option value="CSE">Computer Science & Engineering (CSE)</option>
+            <option value="AIDS">Artificial Intelligence & Data Science (AIDS)</option>
+            <option value="AIML">AI & Machine Learning (AIML)</option>
+            <option value="CIVIL">Civil Engineering (CIVIL)</option>
+            <option value="ECE">Electronics & Communication (ECE)</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="collegeId">College ID</label>
           <input type="text" id="collegeId" required>
         </div>
@@ -256,7 +267,7 @@
             <tr>
               <th>College ID</th>
               <th>Name</th>
-              <th>Email</th>
+              <th>Department</th>
               <th>Registered Courses</th>
               <th>Status</th>
               <th>Action</th>
@@ -267,7 +278,7 @@
               <tr>
                 <td>${student.college_id}</td>
                 <td>${student.first_name} ${student.last_name}</td>
-                <td>${student.email || '-'}</td>
+                <td><span class="badge badge-primary">${student.department || '-'}</span></td>
                 <td>${student.registered_courses}</td>
                 <td>
                   ${student.is_allowed ? '<span class="badge badge-success">Allowed</span>' : '<span class="badge badge-warning">Blocked</span>'}
@@ -465,8 +476,7 @@
       try {
         await apiRequest('/admin/add-student', 'POST', {
           college_id: document.getElementById('collegeId').value,
-          password: document.getElementById('studentPassword').value,
-          first_name: document.getElementById('firstName').value,
+            department: document.getElementById('department').value,
           last_name: document.getElementById('lastName').value,
           email: document.getElementById('email').value
         });

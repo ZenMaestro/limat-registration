@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `first_name` VARCHAR(100),
   `last_name` VARCHAR(100),
   `email` VARCHAR(100),
+  `department` VARCHAR(50) DEFAULT NULL,
   `is_allowed` BOOLEAN DEFAULT FALSE,
   `is_submitted` BOOLEAN DEFAULT FALSE,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

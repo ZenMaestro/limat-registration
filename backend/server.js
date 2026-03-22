@@ -72,6 +72,23 @@ app.post('/api/test-login', async (req, res) => {
   }
 });
 
+// Temporary endpoint to add department to students table
+app.get('/api/setup/update-db', async (req, res) => {
+  try {
+    const connection = await db.getConnection();
+    await connection.query('ALTER TABLE students ADD COLUMN department VARCHAR(50) DEFAULT NULL;');
+    connection.release();
+    res.json({ success: true, message: 'Added department column to students table successfully.' });
+  } catch (error) {
+    if (error.code === 'ER_DUP_FIELDNAME') {
+      res.json({ success: true, message: 'Department column already exists.' });
+    } else {
+      console.error('DB Update Error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  }
+});
+
 // Debug endpoint to check admin password hash in database
 app.get('/api/debug/admin-hash', async (req, res) => {
   try {
