@@ -103,7 +103,7 @@ app.get('/api/debug/admin-hash', async (req, res) => {
 });
 
 // ADMIN SETUP ENDPOINT - Safely insert admin with properly hashed password
-app.post('/api/setup/admin', async (req, res) => {
+app.get('/api/setup/admin', async (req, res) => {
   try {
     const bcrypt = require('bcryptjs');
     const email = 'admin@limat.edu';
