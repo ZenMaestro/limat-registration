@@ -177,8 +177,8 @@ exports.getAllRegistrations = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error fetching registrations:', error);
+    res.status(500).json({ message: 'Server error', error: error.message, code: error.code });
   }
 };
 
