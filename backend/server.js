@@ -20,6 +20,10 @@ db.getConnection().then(connection => {
   console.error('Database connection error:', err);
 });
 
+// Serve static frontend files
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 // Routes
 const authRoutes = require('./routes/auth');
 const studentRoutes = require('./routes/student');
@@ -34,6 +38,11 @@ app.use('/api/course', courseRoutes);
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running' });
+});
+
+// Serve index.html for all non-API routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
