@@ -91,6 +91,13 @@ function logout() {
 // Initialize form handlers when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM loaded, attaching form handlers');
+  console.log('Document body HTML:', document.body.innerHTML.substring(0, 200));
+  console.log('All forms on page:', document.querySelectorAll('form').length);
+  
+  // Debug: list all form IDs
+  document.querySelectorAll('form').forEach(form => {
+    console.log('Found form:', form.id);
+  });
 
   // Student Login Form Handler
   const studentForm = document.getElementById('studentLoginForm');
