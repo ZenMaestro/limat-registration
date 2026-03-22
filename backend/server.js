@@ -11,6 +11,15 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log('Body:', req.body);
+  }
+  next();
+});
+
 // Database connection test
 db.getConnection().then(connection => {
   connection.ping();
@@ -37,7 +46,30 @@ app.use('/api/course', courseRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'Server is running' });
+  res.json({ 
+    status: 'Server is running',
+    jwt_secret_set: !!process.env.JWT_SECRET,
+    db_host: process.env.DB_HOST || 'not set',
+    node_env: process.env.NODE_ENV
+  });
+});
+
+// Admin login test endpoint (for debugging only)
+app.post('/api/test-login', async (req, res) => {
+  try {
+    console.log('Test login endpoint hit');
+    console.log('Request body:', req.body);
+    console.log('Content-Type:', req.headers['content-type']);
+    
+    res.json({ 
+      message: 'Test endpoint working',
+      body_received: req.body,
+      jwt_secret_set: !!process.env.JWT_SECRET
+    });
+  } catch (error) {
+    console.error('Test endpoint error:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Serve index.html for all non-API routes (SPA fallback)
