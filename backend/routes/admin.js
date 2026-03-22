@@ -5,6 +5,7 @@ const {
   getAllStudents,
   toggleStudentAllowed,
   addCourse,
+  getAllCourses,
   addLecturer,
   getAllRegistrations,
   getDashboardStats
@@ -19,6 +20,7 @@ router.put('/student/:studentId/allow', authMiddleware, adminMiddleware, toggleS
 
 // Course management
 router.post('/add-course', authMiddleware, adminMiddleware, addCourse);
+router.get('/courses', authMiddleware, adminMiddleware, getAllCourses);
 
 // Lecturer management
 router.post('/add-lecturer', authMiddleware, adminMiddleware, addLecturer);

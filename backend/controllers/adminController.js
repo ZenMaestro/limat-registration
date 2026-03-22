@@ -183,3 +183,14 @@ exports.getDashboardStats = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// Get all courses
+exports.getAllCourses = async (req, res) => {
+  try {
+    const [result] = await db.query('SELECT * FROM courses ORDER BY course_code');
+    res.json(result);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
