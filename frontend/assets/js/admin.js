@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Populate courses in add lecturer dropdown
   apiRequest('/admin/courses').then(courses => {
-      const select = document.getElementById('lecturerCourse');
+      const select = document.getElementById('courseSelect');
       select.innerHTML = '<option value="" disabled selected>Select a course</option>';
       courses.forEach(course => {
           const option = document.createElement('option');
