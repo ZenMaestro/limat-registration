@@ -142,7 +142,16 @@ app.post('/api/setup/admin', async (req, res) => {
 });
 
 // Serve index.html for all non-API routes (SPA fallback)
-app.get('*', (req, res) => {
+// Make sure this only catches actual page requests, not static files
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
+app.get('/student/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
+app.get('/admin/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 

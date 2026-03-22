@@ -132,69 +132,24 @@
 
   <script src="assets/js/auth.js"></script>
   <script>
-    const studentForm = document.getElementById('studentLoginForm');
-    const adminForm = document.getElementById('adminLoginForm');
-    const roleRadios = document.querySelectorAll('input[name="role"]');
+    // Role toggle - only handle the UI toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const studentForm = document.getElementById('studentLoginForm');
+      const adminForm = document.getElementById('adminLoginForm');
+      const roleRadios = document.querySelectorAll('input[name="role"]');
 
-    // Toggle forms based on role selection
-    roleRadios.forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        if (e.target.value === 'student') {
-          studentForm.classList.remove('hidden');
-          adminForm.classList.add('hidden');
-        } else {
-          studentForm.classList.add('hidden');
-          adminForm.classList.remove('hidden');
-        }
-      });
-    });
-
-    // Student login
-    studentForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      try {
-        const collegeId = document.getElementById('collegeId').value;
-        const password = document.getElementById('password').value;
-
-        const response = await apiRequest('/auth/student-login', 'POST', {
-          college_id: collegeId,
-          password
+      if (roleRadios && roleRadios.length > 0) {
+        roleRadios.forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            if (e.target.value === 'student') {
+              if (studentForm) studentForm.classList.remove('hidden');
+              if (adminForm) adminForm.classList.add('hidden');
+            } else {
+              if (studentForm) studentForm.classList.add('hidden');
+              if (adminForm) adminForm.classList.remove('hidden');
+            }
+          });
         });
-
-        setToken(response.token);
-        setUser(response.student);
-
-        // Check if already submitted
-        if (response.student.is_submitted) {
-          window.location.href = 'student/success.html';
-        } else {
-          window.location.href = 'student/dashboard.html';
-        }
-      } catch (error) {
-        showError(error.message);
-      }
-    });
-
-    // Admin login
-    adminForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      try {
-        const email = document.getElementById('adminEmail').value;
-        const password = document.getElementById('adminPassword').value;
-
-        const response = await apiRequest('/auth/admin-login', 'POST', {
-          email,
-          password
-        });
-
-        setToken(response.token);
-        localStorage.setItem('admin', JSON.stringify(response.admin));
-
-        window.location.href = 'admin/dashboard.html';
-      } catch (error) {
-        showError(error.message);
       }
     });
   </script>
