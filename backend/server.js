@@ -102,6 +102,45 @@ app.get('/api/debug/admin-hash', async (req, res) => {
   }
 });
 
+// ADMIN SETUP ENDPOINT - Safely insert admin with properly hashed password
+app.post('/api/setup/admin', async (req, res) => {
+  try {
+    const bcrypt = require('bcryptjs');
+    const email = 'admin@limat.edu';
+    const password = 'admin123';
+    
+    // Hash password with bcryptjs (same as used in code)
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('Generated bcrypt hash:', hashedPassword);
+    
+    const connection = await db.getConnection();
+    
+    // First delete existing admin
+    await connection.query('DELETE FROM admins WHERE email = ?', [email]);
+    console.log('Deleted existing admin record');
+    
+    // Then insert with properly hashed password using parameterized query
+    const result = await connection.query(
+      'INSERT INTO admins (email, password) VALUES (?, ?)', 
+      [email, hashedPassword]
+    );
+    connection.release();
+    
+    console.log('Admin inserted successfully with hash:', hashedPassword);
+    
+    res.json({
+      status: 'Admin setup successful',
+      email: email,
+      password_set_to: password,
+      bcrypt_hash: hashedPassword,
+      note: 'Use email: admin@limat.edu and password: admin123 to login'
+    });
+  } catch (error) {
+    console.error('Setup endpoint error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Serve index.html for all non-API routes (SPA fallback)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
