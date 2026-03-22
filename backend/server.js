@@ -169,7 +169,7 @@ app.get('/student/*', (req, res) => {
 });
 
 app.get('/admin/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/admin/dashboard.html'));
 });
 
 const PORT = process.env.PORT || 5000;

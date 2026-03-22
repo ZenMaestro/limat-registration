@@ -45,10 +45,8 @@ exports.getAllStudents = async (req, res) => {
       `SELECT
         s.id, s.college_id, s.first_name, s.last_name, s.email, s.department,
         s.is_allowed, s.is_submitted,
-        COUNT(r.id) as registered_courses
+        (SELECT COUNT(*) FROM registrations r WHERE r.student_id = s.id) as registered_courses
       FROM students s
-      LEFT JOIN registrations r ON s.id = r.student_id
-      GROUP BY s.id
       ORDER BY s.college_id`,
     );
 
