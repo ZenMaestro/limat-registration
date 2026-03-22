@@ -87,3 +87,53 @@ function logout() {
   clearUser();
   window.location.href = '/index.html';
 }
+
+// Student Login Form Handler
+if (document.getElementById('studentLoginForm')) {
+  document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const college_id = document.getElementById('collegeId').value;
+      const password = document.getElementById('password').value;
+
+      const data = await apiRequest('/auth/student-login', 'POST', {
+        college_id,
+        password
+      });
+
+      setToken(data.token);
+      setUser(data.student);
+      showSuccess('Login successful! Redirecting...');
+      setTimeout(() => {
+        window.location.href = '/student/dashboard.html';
+      }, 1500);
+    } catch (error) {
+      showError(error.message);
+    }
+  });
+}
+
+// Admin Login Form Handler
+if (document.getElementById('adminLoginForm')) {
+  document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+
+      const data = await apiRequest('/auth/admin-login', 'POST', {
+        email,
+        password
+      });
+
+      setToken(data.token);
+      setUser(data.admin);
+      showSuccess('Admin login successful! Redirecting...');
+      setTimeout(() => {
+        window.location.href = '/admin/dashboard.html';
+      }, 1500);
+    } catch (error) {
+      showError(error.message);
+    }
+  });
+}
