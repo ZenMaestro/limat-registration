@@ -143,6 +143,22 @@ exports.addLecturer = async (req, res) => {
   }
 };
 
+// Get all lecturers
+exports.getAllLecturers = async (req, res) => {
+  try {
+    const [result] = await db.query(
+      `SELECT l.id, l.lecturer_name, l.max_slots, c.course_code, c.course_name 
+       FROM lecturers l
+       JOIN courses c ON l.course_id = c.id
+       ORDER BY l.lecturer_name`
+    );
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching lecturers:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 // Get all registrations
 exports.getAllRegistrations = async (req, res) => {
   try {

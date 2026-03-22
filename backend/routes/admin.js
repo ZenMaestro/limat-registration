@@ -7,6 +7,7 @@ const {
   addCourse,
   getAllCourses,
   addLecturer,
+  getAllLecturers,
   getAllRegistrations,
   getDashboardStats
 } = require('../controllers/adminController');
@@ -24,6 +25,7 @@ router.get('/courses', authMiddleware, adminMiddleware, getAllCourses);
 
 // Lecturer management
 router.post('/add-lecturer', authMiddleware, adminMiddleware, addLecturer);
+router.get('/lecturers', authMiddleware, adminMiddleware, getAllLecturers);
 
 // Registration management
 router.get('/registrations', authMiddleware, adminMiddleware, getAllRegistrations);

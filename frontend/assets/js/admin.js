@@ -204,62 +204,35 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const lecturers = await apiRequest('/admin/lecturers');
       const lecturersList = document.getElementById('lecturersList');
-       if (lecturers.length === 0) {
+      if (lecturers.length === 0) {
         lecturersList.innerHTML = '<p>No lecturers found.</p>';
         return;
       }
-      lecturersList.innerHTML = ''; 
-      
-      const courses = await apiRequest('/admin/courses');
-      const coursesById = courses.reduce((acc, course) => {
-          acc[course.id] = course;
-          return acc;
-      }, {});
-
-      const lecturersByCourse = lecturers.reduce((acc, lec) => {
-          if (!acc[lec.course_id]) {
-              acc[lec.course_id] = [];
-          }
-          acc[lec.course_id].push(lec);
-          return acc;
-      }, {});
-
-      for (const courseId in lecturersByCourse) {
-          const course = coursesById[courseId];
-          const lecs = lecturersByCourse[courseId];
-          
-          const courseGroup = document.createElement('div');
-          courseGroup.className = 'lecturer-course-group';
-          courseGroup.innerHTML = `
-            <h4>${course.course_name} (${course.course_code})</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Enrolled</th>
-                  <th>Max Slots</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${lecs.map(lec => `
-                  <tr>
-                    <td>${lec.lecturer_name}</td>
-                    <td>${lec.enrolled_students}/${lec.max_slots}</td>
-                    <td>
-                      <div class="progress-bar">
-                        <div class="progress-fill ${lec.is_full ? 'full' : ''}" style="width: ${(lec.enrolled_students / lec.max_slots) * 100}%"></div>
-                      </div>
-                    </td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          `;
-          lecturersList.appendChild(courseGroup);
-      }
-
+      const table = document.createElement('table');
+      table.className = 'table';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Max Slots</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${lecturers.map(lecturer => `
+            <tr>
+              <td>${lecturer.lecturer_name}</td>
+              <td><strong>${lecturer.course_code}</strong><br><small>${lecturer.course_name}</small></td>
+              <td>${lecturer.max_slots}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+      lecturersList.innerHTML = '';
+      lecturersList.appendChild(table);
     } catch (error) {
       showError(error.message);
+      document.getElementById('lecturersList').innerHTML = '<p class="error-text">Could not load lecturers.</p>';
     }
   }
 
