@@ -33,6 +33,11 @@ exports.studentLogin = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not set!');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
     // Generate token
     const token = jwt.sign(
       { id: student.id, college_id: student.college_id, role: 'student' },
@@ -50,8 +55,8 @@ exports.studentLogin = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Student login error:', error.message, error);
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 };
 
@@ -80,6 +85,11 @@ exports.adminLogin = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not set!');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
     const token = jwt.sign(
       { id: admin.id, email: admin.email, role: 'admin' },
       process.env.JWT_SECRET,
@@ -91,7 +101,7 @@ exports.adminLogin = async (req, res) => {
       admin: { id: admin.id, email: admin.email }
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Admin login error:', error.message, error);
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 };
