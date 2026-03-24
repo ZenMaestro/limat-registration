@@ -50,6 +50,18 @@ nav {
   position: sticky;
   top: 0;
   z-index: 100;
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 nav .container {
@@ -65,6 +77,7 @@ nav h1 {
   gap: 1rem;
   font-weight: 700;
   letter-spacing: -0.5px;
+  animation: slideInLeft 0.6s ease-out 0.2s backwards;
 }
 
 nav .logo-img {
@@ -75,13 +88,15 @@ nav .logo-img {
 }
 
 nav .logo-img:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(5deg);
+  animation: bounce 0.6s ease-in-out;
 }
 
 nav .nav-right {
   display: flex;
   gap: 1rem;
   align-items: center;
+  animation: slideInRight 0.6s ease-out 0.2s backwards;
 }
 
 nav button {
@@ -113,7 +128,7 @@ nav button:hover {
   max-width: 420px;
   margin: 3rem auto;
   border-top: 5px solid var(--primary);
-  animation: slideUp 0.5s ease-out;
+  animation: slideUp 0.6s ease-out;
 }
 
 @keyframes slideUp {
@@ -127,6 +142,97 @@ nav button:hover {
   }
 }
 
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5), var(--shadow-lg);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.8), var(--shadow-lg);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* Hero Banner Section */
 .hero-section {
   background: linear-gradient(135deg, #1F2937 0%, #2C3E50 100%);
@@ -135,6 +241,7 @@ nav button:hover {
   text-align: center;
   position: relative;
   overflow: hidden;
+  animation: fadeInDown 0.8s ease-out;
 }
 
 .hero-section::before {
@@ -147,6 +254,7 @@ nav button:hover {
   background: radial-gradient(ellipse at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
               radial-gradient(ellipse at 80% 80%, rgba(255, 166, 48, 0.08) 0%, transparent 50%);
   pointer-events: none;
+  animation: gradientShift 6s ease-in-out infinite;
 }
 
 .hero-content {
@@ -161,6 +269,7 @@ nav button:hover {
   font-weight: 700;
   margin-bottom: 1rem;
   line-height: 1.2;
+  animation: fadeInUp 0.8s ease-out 0.2s backwards;
 }
 
 .hero-section .hero-subtitle {
@@ -168,6 +277,7 @@ nav button:hover {
   opacity: 0.9;
   margin-bottom: 2rem;
   line-height: 1.6;
+  animation: fadeInUp 0.8s ease-out 0.4s backwards;
 }
 
 /* Features Grid */
@@ -186,16 +296,38 @@ nav button:hover {
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
   border-top: 4px solid var(--primary);
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.feature-card:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.feature-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.feature-card:nth-child(3) {
+  animation-delay: 0.4s;
 }
 
 .feature-card:hover {
   box-shadow: var(--shadow-lg);
-  transform: translateY(-8px);
+  transform: translateY(-8px) scale(1.02);
 }
 
 .feature-icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.feature-card:nth-child(2) .feature-icon {
+  animation-delay: 0.2s;
+}
+
+.feature-card:nth-child(3) .feature-icon {
+  animation-delay: 0.4s;
 }
 
 .feature-card h3 {
@@ -274,21 +406,43 @@ textarea:focus {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+  width: 300px;
+  height: 300px;
 }
 
 .btn-primary {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-yellow) 100%);
+  background-size: 200% 200%;
   color: white;
   box-shadow: 0 4px 15px rgba(255, 107, 53, 0.25);
   width: 100%;
   padding: 0.9rem;
   font-size: 1.05rem;
+  animation: slideUp 0.5s ease-out;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
-  background: linear-gradient(135deg, var(--primary-dark) 0%, #FF8A4D 100%);
+  background-position: 100% 0;
 }
 
 .btn-primary:active {
@@ -304,10 +458,13 @@ textarea:focus {
 .btn-success {
   background-color: var(--success);
   color: white;
+  transition: all 0.3s ease;
 }
 
 .btn-success:hover {
   background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
 
 .btn-danger {
@@ -345,11 +502,12 @@ textarea:focus {
   margin-bottom: 1.5rem;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
+  animation: fadeInUp 0.5s ease-out backwards;
 }
 
 .card:hover {
   box-shadow: var(--shadow-lg);
-  transform: translateY(-3px);
+  transform: translateY(-3px) scale(1.01);
   border-color: var(--primary);
 }
 
@@ -416,18 +574,20 @@ tr:hover {
   margin-bottom: 1rem;
   transition: all 0.3s ease;
   cursor: pointer;
+  animation: slideInRight 0.5s ease-out backwards;
 }
 
 .lecturer-card:hover {
   border-color: var(--primary);
   box-shadow: 0 6px 20px rgba(255, 107, 53, 0.2);
-  transform: translateY(-3px);
+  transform: translateY(-3px) translateX(-5px);
 }
 
 .lecturer-card.selected {
   border-color: var(--success);
   background: linear-gradient(135deg, rgba(39, 174, 96, 0.05) 0%, rgba(46, 204, 113, 0.05) 100%);
   box-shadow: 0 6px 20px rgba(39, 174, 96, 0.2);
+  animation: glow 2s ease-in-out infinite;
 }
 
 .lecturer-card.full {
@@ -577,10 +737,27 @@ tr:hover {
   box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
   text-align: center;
   transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.stat-card:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.stat-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(4) {
+  animation-delay: 0.3s;
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.05);
   box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
 }
 
@@ -588,16 +765,17 @@ tr:hover {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-    color: white;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-  }
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  animation: zoomIn 0.6s ease-out backwards;
+}
 
 .stat-label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  display: grid;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
@@ -612,6 +790,7 @@ tr:hover {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  animation: fadeInUp 0.5s ease-out backwards;
 }
 
 .course-card::before {
@@ -627,12 +806,13 @@ tr:hover {
 .course-card:hover {
   border-color: var(--primary);
   box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.02);
 }
 
 .course-card.selected {
   border-color: var(--success);
   background: linear-gradient(135deg, rgba(39, 174, 96, 0.05) 0%, rgba(46, 204, 113, 0.05) 100%);
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .course-code {
@@ -689,6 +869,7 @@ tr:hover {
   z-index: 1000;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .modal.active {
@@ -702,6 +883,16 @@ tr:hover {
   max-width: 400px;
   width: 90%;
   box-shadow: var(--shadow-lg);
+  animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-header {
