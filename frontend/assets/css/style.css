@@ -23,6 +23,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Segoe UI', 'Inter', Tahoma, Geneva, Verdana, sans-serif;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/clg.png');
@@ -383,6 +387,13 @@ textarea {
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder {
+  opacity: 0.5;
 }
 
 input[type="text"]:focus,
@@ -394,6 +405,20 @@ textarea:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
   background-color: #fffbf7;
+  transform: scale(1.01);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="radio"]:checked,
+input[type="checkbox"]:checked {
+  accent-color: var(--primary);
+  transform: scale(1.1);
 }
 
 /* Buttons */
@@ -1102,6 +1127,7 @@ footer {
   color: white;
   padding: 3rem 20px 1.5rem;
   margin-top: 4rem;
+  animation: slideInUp 0.8s ease-out;
 }
 
 .footer-content {
@@ -1114,6 +1140,22 @@ footer {
   margin-right: auto;
 }
 
+.footer-section {
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.footer-section:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.footer-section:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.footer-section:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
 .footer-section h4 {
   font-size: 1rem;
   font-weight: 600;
@@ -1121,6 +1163,7 @@ footer {
   color: var(--primary-yellow);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  animation: slideInLeft 0.5s ease-out backwards;
 }
 
 .footer-section ul {
@@ -1135,11 +1178,28 @@ footer {
   color: #D1D5DB;
   text-decoration: none;
   font-size: 0.95rem;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.footer-section ul li a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-yellow);
+  transition: width 0.3s ease;
 }
 
 .footer-section ul li a:hover {
   color: var(--primary-yellow);
+  padding-left: 5px;
+}
+
+.footer-section ul li a:hover::after {
+  width: 100%;
 }
 
 .footer-section p {
@@ -1163,6 +1223,21 @@ footer {
   border-radius: 4px;
   font-size: 0.8rem;
   font-weight: 600;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.accreditation-badges span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.accreditation-badges span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.accreditation-badges span:hover {
+  background: rgba(255, 107, 53, 0.2);
+  transform: scale(1.05);
 }
 
 .footer-bottom {
@@ -1171,6 +1246,7 @@ footer {
   text-align: center;
   color: #9CA3AF;
   font-size: 0.9rem;
+  animation: fadeInUp 0.8s ease-out 0.6s backwards;
 }
 
 .footer-bottom p {
