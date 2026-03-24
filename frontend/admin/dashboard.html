@@ -21,9 +21,9 @@
   </nav>
 
   <div class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
-    <div class="dashboard-header" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 2rem; border-bottom: 4px solid var(--primary);">
-      <h2 style="color: var(--dark); margin-bottom: 0.5rem; font-weight: 700;">🎯 Admin Dashboard</h2>
-      <p style="color: #4B5563; font-weight: 500; font-size: 1.1rem; margin: 0;">Manage students, courses, lecturers, and monitor registrations</p>
+    <div class="dashboard-header" style="position: relative; z-index: 2;">
+      <h2>🎯 Admin Dashboard</h2>
+      <p>Manage students, courses, lecturers, and monitor registrations</p>
     </div>
 
     <!-- Stats Cards -->
@@ -33,28 +33,20 @@
       </div>
     </div>
 
-      <!-- Navigation Tabs -->
-    <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 2rem;">
-      <div style="display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--border);">
-        <button class="tab-btn active" onclick="switchTab('students')" style="padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid var(--primary); color: var(--primary);">
-          👥 Students
-        </button>
-        <button class="tab-btn" onclick="switchTab('courses')" style="padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #6b7280;">
-          📚 Courses
-        </button>
-        <button class="tab-btn" onclick="switchTab('lecturers')" style="padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #6b7280;">
-          👨‍🏫 Lecturers
-        </button>
-        <button class="tab-btn" onclick="switchTab('registrations')" style="padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #6b7280;">
-          📋 Registrations
-        </button>
+    <!-- Navigation Tabs -->
+    <div class="modal-tabs" style="margin-bottom: 2rem;">
+      <div class="modal-tabs-header">
+        <button class="tab-btn active" onclick="switchTab('students')">👥 Students</button>
+        <button class="tab-btn" onclick="switchTab('courses')">📚 Courses</button>
+        <button class="tab-btn" onclick="switchTab('lecturers')">👨‍🏫 Lecturers</button>
+        <button class="tab-btn" onclick="switchTab('registrations')">📋 Registrations</button>
       </div>
 
       <!-- Students Tab -->
-      <div id="studentsTab" class="tab-content" style="padding: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h3>Student Management</h3>
-          <button class="btn btn-primary btn-sm" onclick="openModal('addStudentModal')">+ Add Student</button>
+      <div id="studentsTab" class="tab-content modal-tabs-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+          <h3 style="margin: 0;">Student Management</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addStudentModal')" style="width: auto;">+ Add Student</button>
         </div>
         <div id="studentsList" class="loading">
           <div class="spinner"></div>
@@ -62,10 +54,10 @@
       </div>
 
       <!-- Courses Tab -->
-      <div id="coursesTab" class="tab-content hidden" style="padding: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h3>Course Management</h3>
-          <button class="btn btn-primary btn-sm" onclick="openModal('addCourseModal')">+ Add Course</button>
+      <div id="coursesTab" class="tab-content modal-tabs-content hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+          <h3 style="margin: 0;">Course Management</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addCourseModal')" style="width: auto;">+ Add Course</button>
         </div>
         <div id="coursesList" class="loading">
           <div class="spinner"></div>
@@ -73,10 +65,10 @@
       </div>
 
       <!-- Lecturers Tab -->
-      <div id="lecturersTab" class="tab-content hidden" style="padding: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h3>Lecturer Management</h3>
-          <button class="btn btn-primary btn-sm" onclick="openModal('addLecturerModal')">+ Add Lecturer</button>
+      <div id="lecturersTab" class="tab-content modal-tabs-content hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+          <h3 style="margin: 0;">Lecturer Management</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addLecturerModal')" style="width: auto;">+ Add Lecturer</button>
         </div>
         <div id="lecturersList" class="loading">
           <div class="spinner"></div>
@@ -84,8 +76,8 @@
       </div>
 
       <!-- Registrations Tab -->
-      <div id="registrationsTab" class="tab-content hidden" style="padding: 2rem;">
-        <h3>All Registrations</h3>
+      <div id="registrationsTab" class="tab-content modal-tabs-content hidden">
+        <h3 style="margin: 0 0 1.5rem 0;">All Registrations</h3>
         <div id="registrationsList" class="loading">
           <div class="spinner"></div>
         </div>
