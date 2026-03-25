@@ -1166,6 +1166,111 @@ tr:hover {
 }
 
 @media (max-width: 480px) {
+  /* Navigation Bar */
+  nav {
+    padding: 0.75rem 0;
+  }
+
+  nav h1 {
+    font-size: 1rem;
+    gap: 0.5rem;
+  }
+
+  nav h1 span {
+    display: none;
+  }
+
+  nav h1 img {
+    width: 35px;
+    height: 35px;
+  }
+
+  nav button {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    width: auto;
+  }
+
+  /* Forms and Inputs */
+  .form-container {
+    padding: 1.5rem 1rem;
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .form-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  label {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  select,
+  textarea {
+    padding: 0.65rem;
+    font-size: 1rem;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 0.65rem 1.2rem;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+    width: auto;
+  }
+
+  .btn-primary {
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+
+  /* Modals */
+  .modal {
+    padding: 1rem;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 95vw;
+    margin: 1rem auto;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .modal-footer {
+    padding: 1rem;
+    gap: 0.5rem;
+    flex-direction: column;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+
+  /* Dashboard */
   .stats-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -1186,6 +1291,7 @@ tr:hover {
   .dashboard-header {
     padding: 1rem;
     margin-bottom: 1.5rem;
+    text-align: center;
   }
 
   .dashboard-header h2 {
@@ -1196,11 +1302,25 @@ tr:hover {
     font-size: 0.9rem;
   }
 
+  /* Tabs */
   .tab-btn {
     padding: 0.6rem 0.8rem;
     font-size: 0.8rem;
+    flex: 1;
+    text-align: center;
   }
 
+  .modal-tabs-header {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  .modal-tabs-content {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Course Cards */
   .course-card {
     padding: 1rem;
   }
@@ -1209,39 +1329,112 @@ tr:hover {
     font-size: 1rem;
   }
 
-  .container > div {
-    margin: 0 -1rem;
-    padding: 0 1rem;
+  .course-code {
+    font-size: 0.75rem;
   }
 
-  .modal-tabs-header {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .course-status {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
 
-  .modal-tabs-content {
-    padding: 1.5rem 1rem;
+  .status-badge {
+    width: 100%;
+    text-align: center;
   }
 
-  /* Mobile Table Styling */
+  /* Cards and Lists */
+  .card {
+    padding: 1rem;
+  }
+
+  .lecturer-card {
+    padding: 1rem;
+  }
+
+  .lecturer-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Tables */
   table {
     font-size: 0.85rem;
+  }
+
+  table thead {
+    display: none;
+  }
+
+  table tbody {
     display: block;
-    overflow-x: auto;
-    white-space: nowrap;
   }
 
-  th, td {
-    padding: 0.75rem 0.5rem;
+  table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
   }
 
+  table td {
+    display: block;
+    text-align: right;
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    padding-left: 35%;
+  }
+
+  table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.5rem;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 0.75rem;
+  }
+
+  table td:last-child {
+    border-bottom: none;
+  }
+
+  /* Student Details */
   #studentDetailsCard {
     grid-column: 1 / -1;
   }
 
   #studentDetailsCard > div {
-    grid-template-columns: 1fr;  
+    grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Progress Indicator */
+  .progress-indicator {
+    padding: 1rem;
+  }
+
+  .progress-text {
+    font-size: 0.9rem;
+  }
+
+  .progress {
+    height: 12px;
+  }
+
+  /* Container */
+  .container {
+    padding: 0 1rem;
+  }
+
+  .container > div {
+    margin: 0 -1rem;
+    padding: 0 1rem;
   }
 }
 
