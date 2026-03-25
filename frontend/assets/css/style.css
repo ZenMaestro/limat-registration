@@ -590,6 +590,67 @@ tr:hover {
   background-color: rgba(255, 107, 53, 0.05);
 }
 
+/* Mobile-Friendly Table Styling */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    width: 100%;
+  }
+
+  table thead {
+    display: none;
+  }
+
+  table tbody {
+    display: block;
+  }
+
+  table tr {
+    display: block;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  table td {
+    display: block;
+    text-align: right;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    padding-left: 50%;
+  }
+
+  table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  table td:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 480px) {
+  table {
+    font-size: 0.75rem;
+  }
+
+  table td {
+    padding: 0.5rem 0.75rem;
+    padding-left: 40%;
+  }
+
+  table td:before {
+    font-size: 0.75rem;
+    left: 0.5rem;
+  }
+}
+
 /* Lecturer Card */
 .lecturer-card {
   border: 2px solid rgba(255, 107, 53, 0.2);
@@ -1152,7 +1213,39 @@ tr:hover {
     margin: 0 -1rem;
     padding: 0 1rem;
   }
+
+  .modal-tabs-header {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-tabs-content {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Mobile Table Styling */
+  table {
+    font-size: 0.85rem;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  th, td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  #studentDetailsCard {
+    grid-column: 1 / -1;
+  }
+
+  #studentDetailsCard > div {
+    grid-template-columns: 1fr;  
+    gap: 1rem;
+  }
 }
+
+.stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
@@ -1206,6 +1299,9 @@ tr:hover {
   color: rgba(255, 255, 255, 0.9);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
+
+.course-list {
+  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;

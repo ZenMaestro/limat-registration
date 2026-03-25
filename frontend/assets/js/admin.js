@@ -128,15 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
         <tbody>
           ${students.map(student => `
             <tr>
-              <td>${student.college_id}</td>
-              <td>${student.first_name} ${student.last_name}</td>
-              <td><span class="badge badge-primary">${student.department || '-'}</span></td>
-              <td>${student.registered_courses}</td>
-              <td>
+              <td data-label="College ID">${student.college_id}</td>
+              <td data-label="Name">${student.first_name} ${student.last_name}</td>
+              <td data-label="Department"><span class="badge badge-primary">${student.department || '-'}</span></td>
+              <td data-label="Registered">${student.registered_courses}</td>
+              <td data-label="Status">
                 ${student.is_allowed ? '<span class="badge badge-success">Allowed</span>' : '<span class="badge badge-warning">Blocked</span>'}
                 ${student.is_submitted ? '<span class="badge badge-success">Submitted</span>' : '<span class="badge badge-danger">Pending</span>'}
               </td>
-              <td>
+              <td data-label="Action">
                 <button class="btn btn-sm ${student.is_allowed ? 'btn-danger' : 'btn-success'}" onclick="toggleStudent(${student.id}, ${!student.is_allowed})">
                   ${student.is_allowed ? 'Block' : 'Allow'}
                 </button>
@@ -185,9 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <tbody>
           ${courses.map(course => `
             <tr>
-              <td><strong>${course.course_code}</strong></td>
-              <td>${course.course_name}</td>
-              <td>${course.credits || '-'}</td>
+              <td data-label="Code"><strong>${course.course_code}</strong></td>
+              <td data-label="Name">${course.course_name}</td>
+              <td data-label="Credits">${course.credits || '-'}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -221,9 +221,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <tbody>
           ${lecturers.map(lecturer => `
             <tr>
-              <td>${lecturer.lecturer_name}</td>
-              <td><strong>${lecturer.course_code}</strong><br><small>${lecturer.course_name}</small></td>
-              <td>${lecturer.max_slots}</td>
+              <td data-label="Name">${lecturer.lecturer_name}</td>
+              <td data-label="Course"><strong>${lecturer.course_code}</strong><br><small>${lecturer.course_name}</small></td>
+              <td data-label="Max Slots">${lecturer.max_slots}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -259,10 +259,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <tbody>
           ${registrations.map(reg => `
             <tr>
-              <td>${reg.college_id}</td>
-              <td>${reg.first_name} ${reg.last_name}</td>
-              <td><strong>${reg.course_code}</strong><br><small>${reg.course_name}</small></td>
-              <td>${reg.lecturer_name}</td>
+              <td data-label="Student ID">${reg.college_id}</td>
+              <td data-label="Name">${reg.first_name} ${reg.last_name}</td>
+              <td data-label="Course"><strong>${reg.course_code}</strong><br><small>${reg.course_name}</small></td>
+              <td data-label="Lecturer">${reg.lecturer_name}</td>
             </tr>
           `).join('')}
         </tbody>
