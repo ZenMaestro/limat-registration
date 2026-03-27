@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 // Add student
 exports.addStudent = async (req, res) => {
   try {
-    const { college_id, password, first_name, last_name, email, department } = req.body;
+    const { college_id, password, first_name, last_name, email } = req.body;
 
     if (!college_id || !password) {
       return res.status(400).json({ message: 'College ID and password required' });
@@ -14,14 +14,14 @@ exports.addStudent = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await db.query(
-      `INSERT INTO students (college_id, password, first_name, last_name, email, department, is_allowed)
-      VALUES (?, ?, ?, ?, ?, ?, false)`,
-      [college_id, hashedPassword, first_name, last_name, email, department || null]
+      `INSERT INTO students (college_id, password, first_name, last_name, email, is_allowed)
+      VALUES (?, ?, ?, ?, ?, false)`,
+      [college_id, hashedPassword, first_name, last_name, email]
     );
 
     // Get the inserted student info
     const [insertedStudent] = await db.query(
-      'SELECT id, college_id, first_name, last_name, email, department, is_allowed, is_submitted FROM students WHERE id = ?',
+      'SELECT id, college_id, first_name, last_name, email, is_allowed, is_submitted FROM students WHERE id = ?',
       [result.insertId]
     );
 
@@ -43,12 +43,12 @@ exports.getAllStudents = async (req, res) => {
   try {
     const [result] = await db.query(
       `SELECT
-        s.id, s.college_id, s.first_name, s.last_name, s.email, s.department,
+        s.id, s.college_id, s.first_name, s.last_name, s.email,
         s.is_allowed, s.is_submitted,
         COUNT(r.id) as registered_courses
       FROM students s
       LEFT JOIN registrations r ON s.id = r.student_id
-      GROUP BY s.id, s.college_id, s.first_name, s.last_name, s.email, s.department, s.is_allowed, s.is_submitted
+      GROUP BY s.id, s.college_id, s.first_name, s.last_name, s.email, s.is_allowed, s.is_submitted
       ORDER BY s.college_id`,
     );
 
