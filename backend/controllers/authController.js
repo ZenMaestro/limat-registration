@@ -1,26 +1,49 @@
 const db = require('../config/database');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
+
+// Input validation helper
+function validateInput(input, type) {
+  if (!input) return false;
+  input = String(input).trim();
+  
+  if (type === 'collegeId') {
+    return /^[A-Z0-9]{5,20}$/.test(input);
+  } else if (type === 'email') {
+    return validator.isEmail(input);
+  } else if (type === 'password') {
+    return input.length >= 6 && input.length <= 128;
+  }
+  return true;
+}
 
 // Student Login
 exports.studentLogin = async (req, res) => {
   try {
-    console.log('Student login attempt with body:', req.body);
     const { college_id, password } = req.body;
 
+    // Input validation
     if (!college_id || !password) {
       return res.status(400).json({ message: 'College ID and password required' });
     }
 
-    console.log('Querying database for college_id:', college_id);
+    if (!validateInput(college_id, 'collegeId')) {
+      return res.status(400).json({ message: 'Invalid college ID format' });
+    }
+
+    if (!validateInput(password, 'password')) {
+      return res.status(400).json({ message: 'Invalid password' });
+    }
+
+    // Query database with prepared statement (SQL injection prevention)
     const [results] = await db.query(
-      'SELECT id, college_id, password, first_name, is_allowed, is_submitted FROM students WHERE college_id = ?',
-      [college_id]
+      'SELECT id, college_id, password, first_name, is_allowed, is_submitted FROM students WHERE college_id = ? LIMIT 1',
+      [college_id.toUpperCase()]
     );
 
-    console.log('Database query results:', results.length > 0 ? 'Found' : 'Not found');
-
     if (results.length === 0) {
+      // Generic response to prevent user enumeration
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -31,10 +54,8 @@ exports.studentLogin = async (req, res) => {
       return res.status(403).json({ message: 'You are not allowed to register. Contact admin.' });
     }
 
-    console.log('Student found, comparing passwords...');
-    // Check password
+    // Verify password
     const passwordMatch = await bcrypt.compare(password, student.password);
-    console.log('Password match result:', passwordMatch);
     
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -42,18 +63,16 @@ exports.studentLogin = async (req, res) => {
 
     if (!process.env.JWT_SECRET) {
       console.error('JWT_SECRET is not set!');
-      return res.status(500).json({ message: 'Server configuration error: JWT_SECRET missing' });
+      return res.status(500).json({ message: 'Server error' });
     }
 
-    console.log('Generating JWT token...');
-    // Generate token
+    // Generate JWT token with expiration
     const token = jwt.sign(
       { id: student.id, college_id: student.college_id, role: 'student' },
       process.env.JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '24h', algorithm: 'HS256' }
     );
 
-    console.log('Login successful for:', college_id);
     res.json({
       token,
       student: {
@@ -65,38 +84,43 @@ exports.studentLogin = async (req, res) => {
     });
   } catch (error) {
     console.error('Student login error:', error.message);
-    console.error('Error stack:', error.stack);
-    res.status(500).json({ message: 'Server error: ' + error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
 // Admin Login
 exports.adminLogin = async (req, res) => {
   try {
-    console.log('Admin login attempt with body:', req.body);
     const { email, password } = req.body;
 
+    // Input validation
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password required' });
     }
 
-    console.log('Querying database for email:', email);
+    if (!validateInput(email, 'email')) {
+      return res.status(400).json({ message: 'Invalid email format' });
+    }
+
+    if (!validateInput(password, 'password')) {
+      return res.status(400).json({ message: 'Invalid password' });
+    }
+
+    // Query database with prepared statement
     const [results] = await db.query(
-      'SELECT id, email, password FROM admins WHERE email = ?',
-      [email]
+      'SELECT id, email, password FROM admins WHERE email = ? LIMIT 1',
+      [email.toLowerCase()]
     );
 
-    console.log('Database query results:', results.length > 0 ? 'Found' : 'Not found');
-
     if (results.length === 0) {
+      // Generic response to prevent user enumeration
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const admin = results[0];
-    console.log('Admin found, comparing passwords...');
 
+    // Verify password
     const passwordMatch = await bcrypt.compare(password, admin.password);
-    console.log('Password match result:', passwordMatch);
     
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -104,24 +128,22 @@ exports.adminLogin = async (req, res) => {
 
     if (!process.env.JWT_SECRET) {
       console.error('JWT_SECRET is not set!');
-      return res.status(500).json({ message: 'Server configuration error: JWT_SECRET missing' });
+      return res.status(500).json({ message: 'Server error' });
     }
 
-    console.log('Generating JWT token...');
+    // Generate JWT token with expiration
     const token = jwt.sign(
       { id: admin.id, email: admin.email, role: 'admin' },
       process.env.JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '24h', algorithm: 'HS256' }
     );
 
-    console.log('Login successful for:', email);
     res.json({
       token,
       admin: { id: admin.id, email: admin.email }
     });
   } catch (error) {
     console.error('Admin login error:', error.message);
-    console.error('Error stack:', error.stack);
-    res.status(500).json({ message: 'Server error: ' + error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 };
