@@ -95,14 +95,19 @@ exports.adminLogin = async (req, res) => {
 
     // Input validation
     if (!email || !password) {
+      console.log('Admin login: Missing email or password');
       return res.status(400).json({ message: 'Email and password required' });
     }
 
+    console.log('Admin login attempt with email:', email);
+
     if (!validateInput(email, 'email')) {
+      console.log('Admin login: Email validation failed for:', email);
       return res.status(400).json({ message: 'Invalid email format' });
     }
 
     if (!validateInput(password, 'password')) {
+      console.log('Admin login: Password validation failed');
       return res.status(400).json({ message: 'Invalid password' });
     }
 
@@ -113,6 +118,7 @@ exports.adminLogin = async (req, res) => {
     );
 
     if (results.length === 0) {
+      console.log('Admin login: No admin found with email:', email);
       // Generic response to prevent user enumeration
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -123,6 +129,7 @@ exports.adminLogin = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, admin.password);
     
     if (!passwordMatch) {
+      console.log('Admin login: Password mismatch for email:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -130,6 +137,8 @@ exports.adminLogin = async (req, res) => {
       console.error('JWT_SECRET is not set!');
       return res.status(500).json({ message: 'Server error' });
     }
+
+    console.log('Admin login: Successful for email:', email);
 
     // Generate JWT token with expiration
     const token = jwt.sign(

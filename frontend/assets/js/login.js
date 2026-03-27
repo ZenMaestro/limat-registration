@@ -57,8 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
           window.location.href = '/admin/dashboard.html';
         }, 1500);
       } catch (error) {
-        console.error('Login error:', error);
-        showError(error.message);
+        console.error('Admin Login error:', error);
+        console.error('Error message:', error.message);
+        showError(`Admin Login Error: ${error.message}`);
       }
     });
   } else {
