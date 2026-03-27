@@ -9,7 +9,7 @@ function validateInput(input, type) {
   input = String(input).trim();
   
   if (type === 'collegeId') {
-    return /^[A-Z0-9]{5,20}$/.test(input);
+    return /^[A-Za-z0-9]{3,30}$/.test(input);
   } else if (type === 'email') {
     return validator.isEmail(input);
   } else if (type === 'password') {
